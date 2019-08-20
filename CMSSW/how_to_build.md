@@ -7,7 +7,7 @@ This the most challenging part out of everything. You need to expect melting at 
 
 1. Get a CMS account
 
-Login to cmsdev 10 to 15 by `ssh usename@cmsdev15.cern.ch`
+Login to cmsdev 20 to 25 by `ssh usename@cmsdev25.cern.ch`
 
 2. Create a directory in AFS or some working directory, it'll take more than 50 GB
 
@@ -18,25 +18,17 @@ git clone https://github.com/cms-sw/cmsdist/
 git clone https://github.com/cms-sw/pkgtools
 ```
 
-4. Modify root.spec and root-toolfile.spec
+4. Checkout CXXMODULES branch
 
 ```
-cd cmsdist
-vim root.spec root-toolfile.spec
+git checkout IB/CMSSW_11_0_X/cxxmodule
 ```
-Those spec files are the configuration of CMake, basically. Add `-Druntime_cxxmodule=On` or do whatever you want.
 
-5. Go to singularity
+5. Generate VOMS proxy [optional, only when you want to run benchmark with a grid certificate]
 
 ```
-// Normally
-singularity shell -B /afs -B /cvmfs -B /build -B /afs/cern.ch:/afs/cern.ch docker://cmssw/cc7:latest
-
-// When you want to run benchmark with a grid certificate
-singularity shell -B /afs -B /cvmfs -B /build -B /afs/cern.ch:/afs/cern.ch docker://cmssw/cc7:latest
 voms-proxy-init2 --rfc --voms cms
 ```
-If it doesn't work, modify -B randomly and it will work.
 
 6. Build cmssw-tool-conf (external packages)
 
@@ -44,8 +36,8 @@ If it doesn't work, modify -B randomly and it will work.
 ./pkgtools/cmsBuild -a slc7_amd64_gcc700 --repo cms.week0 -c ./cmsdist -i <directory name that you want to create> -j 16 build cmssw-tool-conf &
 Wait for 3 hours
 cd <directory you created>
-source slc7_amd64_gcc700/lcg/root/6.17.01-cms/bin/thisroot.sh
-source slc7_amd64_gcc700/lcg/root/6.17.01-cms/etc/profile.d/init.sh
+source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/bin/thisroot.sh
+source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/etc/profile.d/init.sh
 root -l // Make sure root works
 ```
 First of all, `slc7_amd64_gcc700` is called "architecture". `--repo cms.week0` is a CMSSW release from which this build takes external packages from. It can be `--repo cms.week1` depending on which production week you're in.
@@ -68,7 +60,7 @@ Successfully built cmssw-tool-conf? Congrats! Then we can finally build CMSSW!
 ```
 cd <directory that you created at step 6>
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-scram -a slc7_amd64_gcc700 list CMSSW_10_5_CXXMODULE_X_
+scram -a slc7_amd64_gcc700 list CMSSW_11_0_CXXMODULE_X_
 // Pick one IB from the list
 scram -a slc7_amd64_gcc700 p <IB that you picked>
 cd CMSSW_IB_YOU PICKED
