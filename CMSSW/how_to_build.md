@@ -36,8 +36,8 @@ voms-proxy-init2 --rfc --voms cms
 ./pkgtools/cmsBuild -a slc7_amd64_gcc820 --repo cms.week0 -c ./cmsdist -i <directory name that you want to create> -j 16 build cmssw-tool-conf &
 Wait for 3 hours
 cd <directory you created>
-source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/bin/thisroot.sh
-source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/etc/profile.d/init.sh
+source build-cmssw-tool-conf/slc7_amd64_gcc8200/lcg/root/6.17.01/bin/thisroot.sh
+source build-cmssw-tool-conf/slc7_amd64_gcc820/lcg/root/6.17.01/etc/profile.d/init.sh
 root -l // Make sure root works
 ```
 First of all, `slc7_amd64_gcc820` is called "architecture". `--repo cms.week0` is a CMSSW release from which this build takes external packages from. It can be `--repo cms.week1` depending on which production week you're in.
@@ -65,7 +65,7 @@ scram -a slc7_amd64_gcc820 list CMSSW_11_0_CXXMODULE_X_
 scram -a slc7_amd64_gcc820 p <IB that you picked>
 cd CMSSW_IB_YOU PICKED
 mv  config/toolbox/slc7_amd64_gcc820/tools/selected config/toolbox/slc7_amd64_gcc820/tools/selected.original
-cp ../slc7_amd64_gcc820/cms/cmssw-tool-conf/45.0-cms/tools/selected config/toolbox/slc7_amd64_gcc700/tools/selected -r
+cp ../slc7_amd64_gcc820/cms/cmssw-tool-conf/45.0-cms/tools/selected config/toolbox/slc7_amd64_gcc820/tools/selected -r
 scram setup
 cmsenv
 git cms-addpkg <Package that you want to build>
