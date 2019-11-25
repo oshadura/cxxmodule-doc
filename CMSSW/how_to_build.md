@@ -21,7 +21,7 @@ git clone https://github.com/cms-sw/pkgtools
 4. Checkout CXXMODULES branch
 
 ```
-git checkout IB/CMSSW_11_0_X/cxxmodule
+git checkout IB/CMSSW_11_0_X/rootmodules
 ```
 
 5. Generate VOMS proxy [optional, only when you want to run benchmark with a grid certificate]
@@ -33,14 +33,14 @@ voms-proxy-init2 --rfc --voms cms
 6. Build cmssw-tool-conf (external packages)
 
 ```
-./pkgtools/cmsBuild -a slc7_amd64_gcc700 --repo cms.week0 -c ./cmsdist -i <directory name that you want to create> -j 16 build cmssw-tool-conf &
+./pkgtools/cmsBuild -a slc7_amd64_gcc820 --repo cms.week0 -c ./cmsdist -i <directory name that you want to create> -j 16 build cmssw-tool-conf &
 Wait for 3 hours
 cd <directory you created>
 source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/bin/thisroot.sh
 source build-cmssw-tool-conf/slc7_amd64_gcc700/lcg/root/6.17.01/etc/profile.d/init.sh
 root -l // Make sure root works
 ```
-First of all, `slc7_amd64_gcc700` is called "architecture". `--repo cms.week0` is a CMSSW release from which this build takes external packages from. It can be `--repo cms.week1` depending on which production week you're in.
+First of all, `slc7_amd64_gcc820` is called "architecture". `--repo cms.week0` is a CMSSW release from which this build takes external packages from. It can be `--repo cms.week1` depending on which production week you're in.
 
 If you look at
 ```
@@ -49,7 +49,7 @@ nweek-02559/ nweek-02560/
 ```
 the larger number is this week's release. So in this case, nweek-02560. If the last digit is even, `--repo cms.week<number>`'s `<number>` is 0. If odd, it's 1 :)
 
-Also, you can build packages with "reference". When fetching external packages, this "reference" allows the build system to create a symlink under packages' installed directory to `/cvmfs/cms-ib.cern.ch/nweek-something/slc7_amd64_gcc700/external/`. This is how external packages are distributed. Modules had an issue with this, which is already fixed. To enable this, you can add `--reference=/cvmfs/cms-ib.cern.ch/nweek-02555` to cmsBuild execution.
+Also, you can build packages with "reference". When fetching external packages, this "reference" allows the build system to create a symlink under packages' installed directory to `/cvmfs/cms-ib.cern.ch/nweek-something/sslc7_amd64_gcc820/external/`. This is how external packages are distributed. Modules had an issue with this, which is already fixed. To enable this, you can add `--reference=/cvmfs/cms-ib.cern.ch/nweek-02555` to cmsBuild execution.
 
 You can also use the source from current directory instead of fetching from the remote. You need to clone ROOT and add `--source root:Source=root-6.17.01`.
 
@@ -60,12 +60,12 @@ Successfully built cmssw-tool-conf? Congrats! Then we can finally build CMSSW!
 ```
 cd <directory that you created at step 6>
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-scram -a slc7_amd64_gcc700 list CMSSW_11_0_CXXMODULE_X_
+scram -a slc7_amd64_gcc820 list CMSSW_11_0_CXXMODULE_X_
 // Pick one IB from the list
-scram -a slc7_amd64_gcc700 p <IB that you picked>
+scram -a slc7_amd64_gcc820 p <IB that you picked>
 cd CMSSW_IB_YOU PICKED
-mv  config/toolbox/slc7_amd64_gcc700/tools/selected config/toolbox/slc7_amd64_gcc700/tools/selected.original
-cp ../slc7_amd64_gcc700/cms/cmssw-tool-conf/45.0-cms/tools/selected config/toolbox/slc7_amd64_gcc700/tools/selected -r
+mv  config/toolbox/slc7_amd64_gcc820/tools/selected config/toolbox/slc7_amd64_gcc820/tools/selected.original
+cp ../slc7_amd64_gcc820/cms/cmssw-tool-conf/45.0-cms/tools/selected config/toolbox/slc7_amd64_gcc700/tools/selected -r
 scram setup
 cmsenv
 git cms-addpkg <Package that you want to build>
